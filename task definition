@@ -1,0 +1,54 @@
+{
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "executionRoleArn": "arn:aws:iam::account_id:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "_",
+      "image": "%REPOSITORY_URI%",
+      "cpu": 1024,
+      "memory": 2048,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "entryPoint": [],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "PORT",
+          "value": "3000"
+        },
+        {
+          "name": "TENANT_MICROSERVICE_URL",
+          "value": "https://app.ai:3001"
+        },
+        {
+          "name": "EMBEDDING_MODEL",
+          "value": "OPENAI"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "/ecs/prod-content-ms-task",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "placementConstraints": [],
+  "volumes": [],
+  "family": "prod-content-ms-task",
+  "cpu": "1024",
+  "memory": "2048"
+}
